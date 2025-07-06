@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>WebClub</title>
+	<link rel="stylesheet" type="text/css" href="../style/style.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Parastoo:wght@400..700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+  <!-- Welcome section -->
+  <section id="welcome" class="welcome-section">
+    <h1>Welcome to WebClub</h1>
+    <p>We are the first web developers club in Kazakhstan</p>
+  </section>
+
+  <!-- Header (скрыта по умолчанию) -->
+  <header>
+    <div class="container">
+      <div class="logo">WebClub</div>
+
+      <!-- Desktop menu -->
+      <nav class="menu">
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#members">Our Members</a></li>
+          <li><a href="#links">Links</a></li>
+        </ul>
+      </nav>
+
+      <!-- Mobile hamburger -->
+      <div class="hamburger">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <!-- Mobile menu (скрыто по умолчанию) -->
+    <nav class="mobile-menu">
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#members">Our Members</a></li>
+        <li><a href="#links">Links</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Основные секции -->
+  <section id="about">
+    <h1>About WebClub</h1>
+    <p>We are a community of passionate web developers building projects and sharing knowledge.</p>
+  </section>
+
+  <section id="members">
+    <h1>Our Members</h1>
+    <p>Meet the talented individuals behind WebClub.</p>
+  </section>
+
+  <section id="links">
+    <h1>Useful Links</h1>
+    <p>Resources and tools recommended by our community.</p>
+  </section>
+
+  <script>
+    const header = document.querySelector('header');
+    const welcome = document.querySelector('#welcome');
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.menu a');
+    const mobileLinks = document.querySelectorAll('.mobile-menu a');
+    const hamburger = document.querySelector('.hamburger');
+    const mobileMenu = document.querySelector('.mobile-menu');
+
+    // Показ шапки после прокрутки далее welcome
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > welcome.offsetHeight - 80) {
+        header.classList.add('visible');
+      } else {
+        header.classList.remove('visible');
+        // при возвращении вверх закрываем мобильное меню
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('active');
+      }
+
+      // Highlight menu
+      let current = '';
+      sections.forEach(sec => {
+        if (pageYOffset >= sec.offsetTop - 120) current = sec.getAttribute('id');
+      });
+      [...navLinks, ...mobileLinks].forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === `#${current}`);
+      });
+    });
+
+    // Плавный scroll
+    [...navLinks, ...mobileLinks].forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        window.scrollTo({ top: target.offsetTop - 70, behavior: 'smooth' });
+        // закрыть меню на мобилке
+        if (mobileMenu.classList.contains('open')) {
+          mobileMenu.classList.remove('open');
+          hamburger.classList.remove('active');
+        }
+      });
+    });
+
+    // Toggle mobile menu
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      mobileMenu.classList.toggle('open');
+    });
+  </script>
+</body>
+</html>
